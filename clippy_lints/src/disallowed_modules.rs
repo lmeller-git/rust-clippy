@@ -135,7 +135,7 @@ impl<'tcx> LateLintPass<'tcx> for DisallowedModules {
         match item.kind {
             ItemKind::Use(path, UseKind::Single(_) | UseKind::Glob)
                 if self.check_path_segments(cx, path.segments.iter(), path.span).is_some()
-                    && let Some(res) = path.res.type_ns =>
+                    && let Some(res) = path.res.type_ns.or(path.res.macro_ns) =>
             {
                 self.check_res_emit(cx, &res, path.span);
             },
